@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>First Web Map - Nicolas Ledesma-Lubertino</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    </head>
+    <body>
+        <div id="map" style="height: 500px"></div>
+        <script>
+            //Zoom map view using locate method
+            var map = L.map('map').setView([30.6101, -96.3401], 16);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+            //Kyle Field circle
+            var circle = L.circle([30.6101, -96.3401], {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 100
+            }).addTo(map).bindPopup('I am a circle.');
+
+            //Custom icon popup for O&M and Academic Building
+            //Code for how the icon looks
+            var LeafIcon = L.Icon.extend({
+                options: {
+                shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+                iconSize:     [38, 95],
+                shadowSize:   [50, 64],
+                iconAnchor:   [22, 94],
+                shadowAnchor: [4, 62],
+                popupAnchor:  [-3, -76]
+                }
+            });
+            //Code to get the image of both icons
+            var greenIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png'}),
+                redIcon = new LeafIcon({iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png'});
+            //Code for the O&M icon location
+            L.marker([30.617725, -96.336732], {icon: greenIcon}).addTo(map)
+                .bindPopup("I am a green leaf.");
+            //Code for the Academic Building icon location
+            L.marker([30.615682, -96.340695], {icon: redIcon}).addTo(map)
+                .bindPopup("I am a red leaf.");
+            
+            //Code for coordinate alert
+            var popup = L.popup();
+            function onMapClick(e) {
+                popup
+                    .setLatLng(e.latlng)
+                    .setContent("You clicked the map at " + e.latlng.toString())
+                    .openOn(map);
+            }
+            map.on('click', onMapClick);
+        </script>
+    </body>
+</html>
